@@ -1,5 +1,4 @@
-CFLAGS = -std=c11 -g -Wall -Werror
-CFLAGS += -O2 -DNDEBUG -march=native -mtune=native -fomit-frame-pointer -s
+CFLAGS = -std=c11 -g -Wall -Werror -DNDEBUG
 
 AMALG = volubile.h volubile.c
 
@@ -9,13 +8,16 @@ VALGRIND = valgrind --leak-check=full --error-exitcode=1
 # Abstract targets
 #--------------------------------------
 
-all: $(AMALG)
+all: $(AMALG) example
 
 check: lua/volubile.so test/test_parse
 	cd test && $(VALGRIND) bash ./test_parse.sh
 	cd test && $(VALGRIND) lua test.lua
 
-.PHONY: all check
+clean:
+	rm -f example lua/volubile.so
+
+.PHONY: all check clean
 
 
 #--------------------------------------
@@ -33,6 +35,9 @@ src/parse.c: src/parse.rl
 
 lua/volubile.so: $(AMALG) lua/volubile.c
 	$(MAKE) -C lua
+
+example: example.c $(AMALG) src/lib/faconde.c src/lib/mini.c
+	$(CC) $(CFLAGS) $< volubile.c src/lib/faconde.c src/lib/mini.c -o $@
 
 test/test_parse: test/test_parse.c $(AMALG) 
 	$(CC) $(CFLAGS) $< src/parse.c -o $@

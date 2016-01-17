@@ -225,6 +225,11 @@ _again:
 
 static void vb_set_match_mode(struct vb_match_ctx *c)
 {
+   if (c->len == 0) {
+      c->mode = VB_EXACT;
+      return;
+   }
+
    switch (*c->str) {
    #define _(C, NAME)                                                          \
    case C:                                                                     \

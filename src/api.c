@@ -10,7 +10,8 @@ const char *vb_strerror(int err)
       [VB_E2LONG] = "query string too long",
       [VB_EPAGE] = "page size too large",
       [VB_EQUTF8] = "query string is not valid UTF-8",
-      [VB_ELUTF8] = "lexicon contains an invalid UTF-8 string"
+      [VB_ELUTF8] = "lexicon contains an invalid UTF-8 string",
+      [VB_EFSA] = "lexicon is not a numbered automaton",
    };
    
    if (err >= 0 && (size_t)err < sizeof tbl / sizeof *tbl)
@@ -22,6 +23,9 @@ int vb_match(const struct mini *lex, struct vb_query *q,
              void (*callback)(void *arg, const char *token, size_t len),
              void *arg)
 {
+   if (mn_type(lex) != MN_NUMBERED)
+      return VB_EFSA;
+
    if (q->page_size > VB_MAX_PAGE_SIZE)
       return VB_EPAGE;
 

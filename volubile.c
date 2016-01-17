@@ -20,6 +20,7 @@ enum {
    VB_EPAGE,      /* Page size too large. */
    VB_EQUTF8,     /* Query string is not valid UTF-8. */
    VB_ELUTF8,     /* Lexicon contains an invalid UTF-8 string. */
+   VB_EFSA,       /* Lexicon is not a numbered automaton. */
 };
 
 /* Returns a string describing an error code. */
@@ -87,6 +88,7 @@ struct vb_query {
 }
 
 /* Searches a lexicon.
+ * The lexicon must be a numbered automaton.
  * The provided callback function will be called for each matching word. It will
  * be passed the current matching word. On success, returns VB_OK, otherwise an
  * error code.
@@ -371,7 +373,8 @@ const char *vb_strerror(int err)
       [VB_E2LONG] = "query string too long",
       [VB_EPAGE] = "page size too large",
       [VB_EQUTF8] = "query string is not valid UTF-8",
-      [VB_ELUTF8] = "lexicon contains an invalid UTF-8 string"
+      [VB_ELUTF8] = "lexicon contains an invalid UTF-8 string",
+      [VB_EFSA] = "lexicon is not a numbered automaton",
    };
    
    if (err >= 0 && (size_t)err < sizeof tbl / sizeof *tbl)
@@ -383,6 +386,9 @@ int vb_match(const struct mini *lex, struct vb_query *q,
              void (*callback)(void *arg, const char *token, size_t len),
              void *arg)
 {
+   if (mn_type(lex) != MN_NUMBERED)
+      return VB_EFSA;
+
    if (q->page_size > VB_MAX_PAGE_SIZE)
       return VB_EPAGE;
 
@@ -1194,6 +1200,11 @@ _again:
 
 static void vb_set_match_mode(struct vb_match_ctx *c)
 {
+   if (c->len == 0) {
+      c->mode = VB_EXACT;
+      return;
+   }
+
    switch (*c->str) {
    #define _(C, NAME)                                                          \
    case C:                                                                     \

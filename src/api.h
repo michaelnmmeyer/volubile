@@ -17,6 +17,7 @@ enum {
    VB_EPAGE,      /* Page size too large. */
    VB_EQUTF8,     /* Query string is not valid UTF-8. */
    VB_ELUTF8,     /* Lexicon contains an invalid UTF-8 string. */
+   VB_EFSA,       /* Lexicon is not a numbered automaton. */
 };
 
 /* Returns a string describing an error code. */
@@ -84,6 +85,7 @@ struct vb_query {
 }
 
 /* Searches a lexicon.
+ * The lexicon must be a numbered automaton.
  * The provided callback function will be called for each matching word. It will
  * be passed the current matching word. On success, returns VB_OK, otherwise an
  * error code.

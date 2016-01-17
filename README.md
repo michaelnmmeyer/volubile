@@ -30,11 +30,57 @@ The following must also be compiled with your code:
 These are C11 source files, so you must use a modern C compiler, which means
 either GCC or CLang on Unix.
 
+## Usage
+
+### Example
+
+There is a concrete usage example in the file
+[`example.c`](https://raw.githubusercontent.com/michaelnmmeyer/volubile/master/example.c)in
+this directory. It searches the lexicon encoded in `example_lexicon.dat`.
+Compile the example program with `make`, and use it like this:
+
+    $ ./example '@redundant'   # find words similar to "redundant"
+    redundant
+    redundancy
+    redundantly
+    redounding
+    refunding
+    => [76155 3]
+
+Only the five words most similar to "`redundant`" are shown, plus two numbers
+that encode informations necessary to access the next results page. We can
+display the next five words by issuing the same query together with these
+numbers:
+
+    ./example '@redundant' 76155 3
+    reluctant
+    remnant
+    repentant
+    repugnant
+    resonant
+    => [77312 3]
+
+This process can be repeated again to access the remaining matching words.
+
+### Creating a lexicon
+
+To search inside a lexicon, you must first encode it as a numbered automaton in
+the [`mini`](https://github.com/michaelnmmeyer/mini) format. This can be done
+with the `mini` command-line tool, or through the corresponding programmatic
+interface. With the command-line tool, you can create a lexicon with a command
+like the following:
+
+    $ mini create -t numbered lexicon.dat < /usr/share/dict/words
+
+Note the use of the `-t` switch.
+
 ## Query syntax
 
 ### Matching mode selectors
 
-A few characters have a special meaning when in leading position:
+Several string matching modes are available. When the selected one is `VB_AUTO`,
+a few characters have a special meaning when they appear at the beginning of a
+query:
 
     #apple   find words that have "apple" as a substring; equivalent to the
              pattern *apple*
@@ -56,7 +102,8 @@ supported syntax is as follows:
     [abc]     matches any of the characters a, b, or c
     [^abc]    matches any character but a, b, and c
 
-Character classes are not supported.
+Glob characters are only given a special meaning when the selected matching made
+is `VB_AUTO` or `VB_GLOB`. Otherwise, they are interpreted as literals.
 
 The characters `[`, `?`, and `*` are interpreted as literals when in a group.
 The character `]`, to be used in a group, must be placed in first position. The
