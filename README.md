@@ -35,8 +35,8 @@ either GCC or CLang on Unix.
 ### Example
 
 There is a concrete usage example in the file
-[`example.c`](https://raw.githubusercontent.com/michaelnmmeyer/volubile/master/example.c)in
-this directory. It searches the lexicon encoded in `example_lexicon.dat`.
+[`example.c`](https://raw.githubusercontent.com/michaelnmmeyer/volubile/master/example.c)
+in this directory. It searches the lexicon encoded in `example_lexicon.dat`.
 Compile the example program with `make`, and use it like this:
 
     $ ./example '@redundant'   # find words similar to "redundant"

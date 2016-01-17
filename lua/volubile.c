@@ -7,6 +7,31 @@
 #include "../src/lib/mini.h"
 #include "../src/lib/faconde.h"
 
+/* Begin compatibility code for Lua 5.1. Copy-pasted from Lua's source. */
+#if !defined(LUA_VERSION_NUM) || LUA_VERSION_NUM == 501
+
+static void luaL_setfuncs (lua_State *L, const luaL_Reg *l, int nup) {
+  luaL_checkstack(L, nup+1, "too many upvalues");
+  for (; l->name != NULL; l++) {  /* fill the table with given functions */
+    int i;
+    lua_pushstring(L, l->name);
+    for (i = 0; i < nup; i++)  /* copy upvalues to the top */
+      lua_pushvalue(L, -(nup+1));
+    lua_pushcclosure(L, l->func, nup);  /* closure with those upvalues */
+    lua_settable(L, -(nup + 3));
+  }
+  lua_pop(L, nup);  /* remove upvalues */
+}
+
+#define luaL_newlibtable(L,l) \
+  lua_createtable(L, 0, sizeof(l)/sizeof((l)[0]) - 1)
+
+#define luaL_newlib(L,l)   (luaL_newlibtable(L,l), luaL_setfuncs(L,l,0))
+
+#endif
+/* End compatibility code. */
+
+
 /* See the Lua binding of mini. */
 #define MN_MT "mini"
 
