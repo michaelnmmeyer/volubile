@@ -5,6 +5,8 @@ CFLAGS = -I/usr/include/lua$(LUA_VERSION)
 CFLAGS += -std=c11 -fPIC -shared -g -Wall -Werror -fvisibility=hidden
 CFLAGS += -O2 -DNDEBUG -march=native -mtune=native -fomit-frame-pointer
 
+SOURCES = volubile.c ../volubile.c ../src/lib/faconde.c ../src/lib/mini.c
+
 LIB = volubile.so
 
 all: $(LIB)
@@ -20,5 +22,5 @@ uninstall:
 
 .PHONY: all clean install uninstall
 
-$(LIB): volubile.c ../volubile.c ../volubile.h ../src/lib/faconde.c ../src/lib/mini.c
-	$(CC) $(CFLAGS) $< ../volubile.c ../src/lib/faconde.c ../src/lib/mini.c -o $@
+$(LIB): ../volubile.h $(SOURCES)
+	$(CC) $(CFLAGS) $(SOURCES) -o $@
