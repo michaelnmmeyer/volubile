@@ -97,9 +97,6 @@ function test.zero()
       -- Should not break when page_size = 0
       local ret = lexicon:match(tokens[mode], {mode = mode, page_size = 0})
       assert(#ret == 0 and not ret.has_next)
-      -- Should not break when token = ""
-      local ret = lexicon:match("", {mode = mode, page_size = 0})
-      assert(#ret == 0 and not ret.has_next)
    end
 end
 
