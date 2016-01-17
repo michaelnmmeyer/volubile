@@ -1,5 +1,4 @@
-CFLAGS = -std=c11 -g -Wall -Werror -DNDEBUG
-
+CFLAGS = -std=c11 -g -Wall -Werror -DNDEBUG -Wno-unused-function
 AMALG = volubile.h volubile.c
 
 VALGRIND = valgrind --leak-check=full --error-exitcode=1
