@@ -16,6 +16,9 @@ You can also pass in the correct version number on the command-line:
 
 ## Documentation
 
+There is a concrete usage example in the file `example.lua` in this directory.
+The following is a more formal description.
+
 ### Constants
 
 `volubile.VERSION`  

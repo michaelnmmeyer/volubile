@@ -43,4 +43,5 @@ lab/
 
 # Binaries
 test/test_parse
+test/test_heap
 example

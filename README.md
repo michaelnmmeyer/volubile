@@ -30,6 +30,9 @@ The following must also be compiled with your code:
 These are C11 source files, so you must use a modern C compiler, which means
 either GCC or CLang on Unix.
 
+A Lua binding is also available. See the file `README.md` in the `lua` directory
+for instructions about how to build and use it.
+
 ## Usage
 
 ### Example
@@ -52,7 +55,7 @@ that encode informations necessary to access the next results page. We can
 display the next five words by issuing the same query together with these
 numbers:
 
-    ./example '@redundant' 76155 3
+    $ ./example '@redundant' 76155 3
     reluctant
     remnant
     repentant

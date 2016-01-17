@@ -10,12 +10,13 @@ VALGRIND = valgrind --leak-check=full --error-exitcode=1
 
 all: $(AMALG) example
 
-check: lua/volubile.so test/test_parse
+check: lua/volubile.so test/test_parse test/test_heap
 	cd test && $(VALGRIND) bash ./test_parse.sh
-	cd test && $(VALGRIND) lua test.lua
+	cd test && $(VALGRIND) lua test_lib.lua
+	cd test && $(VALGRIND) ./test_heap
 
 clean:
-	rm -f example lua/volubile.so
+	rm -f example lua/volubile.so test/test_parse test/test_heap
 
 .PHONY: all check clean
 
@@ -39,5 +40,5 @@ lua/volubile.so: $(AMALG) lua/volubile.c
 example: example.c $(AMALG) src/lib/faconde.c src/lib/mini.c
 	$(CC) $(CFLAGS) $< volubile.c src/lib/faconde.c src/lib/mini.c -o $@
 
-test/test_parse: test/test_parse.c $(AMALG) 
+test/%: test/%.c $(AMALG) 
 	$(CC) $(CFLAGS) $< src/parse.c -o $@
