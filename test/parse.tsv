@@ -1,0 +1,12 @@
+*foobar	foobar	SUFFIX
+foobar*	foobar	PREFIX
+*foobar*	foobar	SUBSTR
+*foo*bar*	*foo*bar*	GLOB
+foobar	foobar	EXACT
+foobar?	foobar?	GLOB
+fo[o]bar	fo[o]bar	GLOB
+*foo?bar*	*foo?bar*	GLOB
+****foobar	foobar	SUFFIX
+foobar******	foobar	PREFIX
+*****foobar****	foobar	SUBSTR
+*******************fo***?*obar***************	*fo*?*obar*	GLOB
